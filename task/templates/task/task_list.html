@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Список задач{% endblock %}
+
+{% block content %}
+    <h2 class="mb-3">Мои задачи</h2>
+    <a href="{% url 'task_create' %}" class="btn btn-success mb-3">Добавить задачу</a>
+    <a href="{% url 'completed_tasks' %}" class="btn btn-success mb-3">Завершённые задачи</a>
+
+    <form method="GET" class="mb-3 d-flex">
+        <input type="text" name="search" placeholder="Поиск по названию..." class="form-control me-2" value="{{ search_query }}">
+
+        <button type="submit" class="btn btn-primary">Поиск</button>
+
+        <select name="status" class="form-select me-2">
+            <option value="">Все статусы</option>
+            <option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Ожидание</option>
+            <option value="In Progress" {% if request.GET.status == "In Progress" %}selected{% endif %}>В процессе</option>
+            <option value="Done" {% if request.GET.status == "Done" %}selected{% endif %}>Завершено</option>
+        </select>
+
+
+        <select name="priority" class="form-select me-2">
+            <option value="">Все приоритеты</option>
+            <option value="Low" {% if request.GET.priority == "Low" %}selected{% endif %}>Низкий</option>
+            <option value="Medium" {% if request.GET.priority == "Medium" %}selected{% endif %}>Средний</option>
+            <option value="High" {% if request.GET.priority == "High" %}selected{% endif %}>Высокий</option>
+        </select>
+
+        <select name="deadline" class="form-select me-2">
+            <option value="">Все дедлайны</option>
+            <option value="today" {% if request.GET.deadline == "today" %}selected{% endif %}>Сегодня</option>
+            <option value="this_week" {% if request.GET.deadline == "this_week" %}selected{% endif %}>На этой неделе</option>
+            <option value="this_month" {% if request.GET.deadline == "this_month" %}selected{% endif %}>В этом месяце</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Фильтровать</button>
+
+
+        <select name="sort" class="form-select me-2">
+            <option value="created_at" {% if sort_by == "created_at" %}selected{% endif %}>Сортировать</option>
+            <option value="title" {% if sort_by == "title" %}selected{% endif %}>По названию (А-Я)</option>
+            <option value="-title" {% if sort_by == "-title" %}selected{% endif %}>По названию (Я-А)</option>
+            <option value="priority" {% if sort_by == "priority" %}selected{% endif %}>По приоритету (низкий → высокий)</option>
+            <option value="-priority" {% if sort_by == "-priority" %}selected{% endif %}>По приоритету (высокий → низкий)</option>
+            <option value="status" {% if sort_by == "status" %}selected{% endif %}>По статусу (A-Z)</option>
+            <option value="-status" {% if sort_by == "-status" %}selected{% endif %}>По статусу (Z-A)</option>
+            <option value="deadline" {% if sort_by == "deadline" %}selected{% endif %}>По дедлайну (раньше → позже)</option>
+            <option value="-deadline" {% if sort_by == "-deadline" %}selected{% endif %}>По дедлайну (позже → раньше)</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Применить</button>
+    </form>
+
+    {% if tasks %}
+        <ul class="list-group">
+            {% for task in tasks %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ task.title|truncatewords:5 }}</strong> — {{ task.description|truncatewords:5 }}
+                        <span class="badge bg-primary">{{ task.status }}</span>
+                        <br>
+                        <small class="text-muted">Дата создания: {{ task.created_at|date:"d.m.Y H:i" }}</small>
+                        <br>
+                        <span class="badge bg-info">Сложность: {{ task.priority }}</span>
+                    </div>
+                    <div>
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-warning btn-sm">Редактировать</a>
+                        <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+                        <a href="{%url 'task_complete' task.pk %}" class="btn btn-success btn-sm">Завершить</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-muted">Нет задач. Добавьте первую!</p>
+    {% endif %}
+{% endblock %}

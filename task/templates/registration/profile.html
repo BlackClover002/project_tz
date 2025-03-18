@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - {{ user.username }}{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
+        <div class="profile-header">
+            <h1>Профиль пользователя: {{ user.username }}</h1>
+            <p>Email: {{ user.email }}</p>
+            <p>Дата регистрации: {{ user.date_joined|date:"d M Y" }}</p>
+            <a href="{% url 'password_change' %}" class="profile-btn">Изменить пароль</a>
+            <a href="{% url 'edit_profile' %}" class="profile-btn">Редактировать профиль</a>
+        </div>
+    </div>
+
+    <style>
+        .profile-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #28a745, #218838);
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .profile-btn:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .profile-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+{% endblock %}

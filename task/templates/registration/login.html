@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="login-container">
+        <h2 class="login-title">Вход</h2>
+        <form method="post" class="login-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error-message">
+                            {% for error in field %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="login-btn">Войти</button>
+        </form>
+        <p class="password-reset">
+            <a href="{% url 'password_reset' %}" class="text-decoration-none">Забыли пароль?</a>
+        </p>
+    </div>
+
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #28a745;
+            box-shadow: 0px 0px 5px rgba(40, 167, 69, 0.5);
+            outline: none;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #28a745, #218838);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-btn:active {
+            transform: translateY(2px);
+        }
+
+        .password-reset {
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
